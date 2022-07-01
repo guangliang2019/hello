@@ -9,10 +9,10 @@ export default defineComponent({
       <div>
         <Button
           onClick={() => {
-            console.log(fetchQuestion('冯老师的学生是'));
+            console.log(fetchQuestion('冯建周的学生是'));
           }}
         >
-          冯老师的学生是
+          冯建周的学生是
         </Button>
       </div>
     );
