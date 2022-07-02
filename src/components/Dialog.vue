@@ -81,8 +81,9 @@ export default defineComponent({
     overflow: scroll;
     position: relative;
     padding: 24px 12px;
-    height: 480px;
-    max-height: 480px;
+    box-sizing: border-box;
+    height: 496px;
+    max-height: 496px;
   }
   &-mask {
     width: var(--hello-width);
