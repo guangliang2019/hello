@@ -11,22 +11,25 @@ import {
 import { IconSend } from '@arco-design/web-vue/es/icon';
 import { defineComponent, reactive, ref } from 'vue';
 import { fetchQuestion } from '../utils/fetch';
-
+import { scrollToBottom } from '../utils/dom';
 export default defineComponent({
   setup() {
     const commentList = ref<any[]>([]);
     const form = reactive({
       question: '',
     });
+
     const sendQuestion = () => {
-      console.log(commentList.value);
       commentList.value.push(
         <Comment class="dialog-comment-user" content={form.question} />,
       );
+      const dialogBox = document.querySelector('.dialog-box') as Element;
+      scrollToBottom(dialogBox);
       fetchQuestion(form.question).then((res) => {
         commentList.value.push(
           <Comment class="dialog-comment" content={(res as any).data} />,
         );
+        scrollToBottom(dialogBox);
       });
     };
     const handleSubmit = () => {
@@ -37,8 +40,8 @@ export default defineComponent({
     return () => (
       <>
         <div class="dialog-mask" />
-        <LayoutContent class="dialog-box">{commentList.value}</LayoutContent>
-        <LayoutFooter class="dialog-input-box">
+        <div class="dialog-box">{commentList.value}</div>
+        <div class="dialog-input-box">
           <Form
             labelColProps={{ span: 0 }}
             wrapperColProps={{ span: 24 }}
@@ -63,7 +66,7 @@ export default defineComponent({
               </Button>
             </FormItem>
           </Form>
-        </LayoutFooter>
+        </div>
       </>
     );
   },
@@ -78,6 +81,8 @@ export default defineComponent({
     overflow: scroll;
     position: relative;
     padding: 24px 12px;
+    height: 480px;
+    max-height: 480px;
   }
   &-mask {
     width: var(--hello-width);
@@ -92,6 +97,10 @@ export default defineComponent({
     z-index: 1000;
   }
   &-input-box {
+    .arco-form-item {
+      margin: 0;
+      margin-right: 4px;
+    }
     height: 60px;
     background-color: var(--color-bg-1);
     display: flex;
@@ -110,9 +119,10 @@ export default defineComponent({
   }
   &-comment {
     z-index: 10;
+    align-self: flex-start;
     border: 1px solid var(--color-border);
     border-radius: 0 8px 8px 8px;
-    padding: 8px;
+    padding: 8px 12px;
     max-width: 75%;
     &-user {
       z-index: 10;

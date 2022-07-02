@@ -56,6 +56,7 @@ export default defineComponent({
     background-color: var(--color-bg);
   }
   &-layout {
+    display: block;
     width: var(--hello-width);
     height: var(--hello-height);
     background-color: var(--color-bg);
