@@ -4,5 +4,5 @@ body {
   background-color: var(--color-bg-1);
 }
 * {
-  transition: background-color 300ms, border-color 300ms;
+  transition: background-color 400ms, border-color 400ms;
 }

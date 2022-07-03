@@ -60,7 +60,7 @@ export const surprise = () => {
 export const smile = () => {
   if (expressionNow) return;
   expressionNow = true;
-  changeEye('smile', 400, 2000);
+  changeEye('smile', 300, 2000);
   const mouseMask = document.querySelector(
     '.face-mouse-box-mask',
   ) as HTMLDivElement;
