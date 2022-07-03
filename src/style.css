@@ -1,4 +1,8 @@
 body {
   --hello-width: 550px;
   --hello-height: 986px;
+  background-color: var(--color-bg-1);
+}
+* {
+  transition: background-color 300ms, border-color 300ms;
 }

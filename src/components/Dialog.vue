@@ -1,24 +1,21 @@
 <script lang="tsx">
-import {
-  Button,
-  Input,
-  LayoutContent,
-  LayoutFooter,
-  Form,
-  FormItem,
-  Comment,
-} from '@arco-design/web-vue';
+import { Button, Input, Form, FormItem, Comment } from '@arco-design/web-vue';
 import { IconSend } from '@arco-design/web-vue/es/icon';
 import { defineComponent, reactive, ref } from 'vue';
 import { fetchQuestion } from '../utils/fetch';
 import { scrollToBottom } from '../utils/dom';
+import { doExpressionOfAnswer } from '@/utils/expression';
 export default defineComponent({
   setup() {
+    // comment 组件数组
     const commentList = ref<any[]>([]);
+
+    // 表单的数据源
     const form = reactive({
       question: '',
     });
 
+    // 发送用户问题，同步视图；得到回答，同步视图
     const sendQuestion = () => {
       commentList.value.push(
         <Comment class="dialog-comment-user" content={form.question} />,
@@ -26,20 +23,28 @@ export default defineComponent({
       const dialogBox = document.querySelector('.dialog-box') as Element;
       scrollToBottom(dialogBox);
       fetchQuestion(form.question).then((res) => {
-        commentList.value.push(
-          <Comment class="dialog-comment" content={(res as any).data} />,
-        );
-        scrollToBottom(dialogBox);
+        setTimeout(() => {
+          commentList.value.push(
+            <Comment class="dialog-comment" content={res.data} />,
+          );
+          // 滚到底部
+          scrollToBottom(dialogBox);
+          // 做表情
+          doExpressionOfAnswer(res.data);
+        }, 500);
       });
     };
+
+    // 提交表单函数
     const handleSubmit = () => {
       if (!form.question) return;
       sendQuestion();
       form.question = '';
     };
+
+    // 返回渲染函数
     return () => (
       <>
-        <div class="dialog-mask" />
         <div class="dialog-box">{commentList.value}</div>
         <div class="dialog-input-box">
           <Form
@@ -62,6 +67,7 @@ export default defineComponent({
                 size="large"
                 type="primary"
               >
+                {/* 这是Vue插槽的JSX语法形式 */}
                 {{ default: () => '发送', icon: () => <IconSend /> }}
               </Button>
             </FormItem>
@@ -84,6 +90,7 @@ export default defineComponent({
     box-sizing: border-box;
     height: 496px;
     max-height: 496px;
+    border-top: 1px solid var(--color-border-1);
   }
   &-mask {
     width: var(--hello-width);
@@ -107,7 +114,7 @@ export default defineComponent({
     display: flex;
     flex-direction: row;
     align-items: center;
-    //border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border-1);
     padding: 0px 12px;
     .arco-input-wrapper {
       border-bottom-right-radius: 0;
